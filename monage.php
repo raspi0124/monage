@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: monage
-Description: monage
+Description: Let's make monage (giving monacoin) to wordpress blog more easier!
 Version: 0.01
 Author: raspi0124
 Author URI: https://raspi-diary.com/
