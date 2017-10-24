@@ -1,4 +1,4 @@
-=== Monage for WordPress ===
+=== Monage ===
 Contributors: raspi0124
 Tags: monacoin,mona,virtual currency,crypto currency
 Requires at least: 4.7
