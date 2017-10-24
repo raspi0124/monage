@@ -80,7 +80,6 @@ $monage_bottom = <<< sentence
 モナを投げる
 </a> 
 
-[monage_twid]
 sentence;
  
     if(!is_feed() && !is_home()) {
