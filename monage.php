@@ -36,7 +36,13 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA)。
 function monage_post_twitterid() {
     return get_option( 'monage_twitter_account' );
 }
+
+function monage_img_lacation() {
+    return plugins_url( 'monage.png', __FILE__ );
+}
+
 add_shortcode('monage_twid', 'monage_post_twitterid');
+add_shortcode('monage_imgloc', 'monage_img_lacation');
 //add option for wordpress
     function monage_addfield() {
     add_settings_field( 'twitter', 'モナコインを投げる先のTwitterのIDをお願いします。', 'monage_twitter_field', 'general', 'default', array( 'label_for' => 'monage_twitter_account' ) );
@@ -62,7 +68,7 @@ function monage_addafterpost($monage_content) {
  
 $monage_bottom = <<< sentence
 <center><a href="https://twitter.com/share?text=@tipmona%20tip%20@[monage_twid]%200.114114%20Monaを送ります">
-モナゲする<img src="https://preview.ibb.co/k6pM86/mona.png" alt="Monacoinを投げる" class="monage_image">
+モナゲする<img src="[monage_imgloc]" alt="Monacoinを投げる" class="monage_image">
 </a> </center>
 <style>
 .monage_image {
