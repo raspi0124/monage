@@ -2,10 +2,10 @@
 /*
 Plugin Name: monage
 Description: Let's make monage (giving monacoin) to wordpress blog more easier!
-Version: 0.01
+Version: 0.03
 Author: raspi0124
 Author URI: https://raspi-diary.com/
-License: GPL2
+License: GPLv3
 */
 /*  Copyright 2017 raspi0124 (email : admin@raspi-diary.com)
     This program is free software; you can redistribute it and/or modify
@@ -68,11 +68,11 @@ function monage_addafterpost($monage_content) {
  
 $monage_bottom = <<< sentence
 <center><a href="https://twitter.com/share?text=@tipmona%20tip%20@[monage_twid]%200.114114%20Monaを送ります">
-モナゲする<img src="[monage_imgloc]" alt="Monacoinを投げる" class="monage_image">
-</a> </center>
-<style>
+<img src="[monage_imgloc]" alt="Monacoinを投げる" rel="nofollow" class="monage_image">
+</a> <br><a href="https://monappy.jp/memo_logs/view/monappy/123" target="_blank">モナゲ(tipmona)ってなに？</a><br>
+<a href="http://dic.nicovideo.jp/a/monacoin" rel="nofollow" target="_blank">そもそもMonacoinってなに？</a>
 .monage_image {
-    width: 200px;  /* 横幅を200pxに */
+    width: 300px;  /* 横幅を300pxに */
 }
 </style>
 sentence;
