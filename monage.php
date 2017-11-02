@@ -2,7 +2,7 @@
 /*
 Plugin Name: monage
 Description: Let's make monage (giving monacoin) to wordpress blog more easier!
-Version: 0.04
+Version: 0.05
 Author: raspi0124
 Author URI: https://raspi-diary.com/
 License: GPLv3
