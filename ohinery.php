@@ -7,7 +7,7 @@ Author: raspi0124,kazu0617
 Author URI: https://raspi-diary.com/
 License: GPLv3
 */
-/*  Copyright 2017 raspi0124 (email : admin@raspi-diary.com)
+/*  Copyright 2017 raspi0124 and kazu0617 (email : admin@raspi-diary.com)
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
@@ -18,7 +18,7 @@ License: GPLv3
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-Copyright  2017  raspi0124
+Copyright  2017  raspi0124 and kazu0617
 このプログラムはフリーソフトウェアです。あなたはこれを、フリーソフトウェ
 ア財団によって発行された GNU 一般公衆利用許諾契約書(バージョン2か、希
 望によってはそれ以降のバージョンのうちどれか)の定める条件の下で再頒布
