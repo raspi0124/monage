@@ -33,6 +33,25 @@ Copyright  2017  raspi0124
 Temple Place, Suite 330, Boston, MA 02111-1307 USA)。
     This software includes the work that is distributed in the Apache License 2.0
 */
+
+
+$monage_usecdn = "1";
+
+
+if ( $monage_usecdn == "1" ) {
+    function monage_img_location() {
+    return "https://raw.githubusercontent.com/raspi0124/monage/5fc30ee7/monage.png";
+}
+}
+
+
+if ( $monage_usecdn == "0" ) {
+    function monage_img_location() {
+    return plugins_url( 'monage.png', __FILE__ );
+}
+}
+
+
 function monage_post_twitterid() {
     return get_option( 'monage_twitter_account' );
 }
@@ -43,7 +62,7 @@ function monage_picwi() {
 }
 
 add_shortcode('monage_twid', 'monage_post_twitterid');
-add_shortcode('monage_imgloc', 'monage_img_lacation');
+add_shortcode('monage_imgloc', 'monage_img_location');
 add_shortcode('monage_picwi', 'monage_picwi');
 
 
@@ -79,21 +98,6 @@ function monage_options_page() {
         update_option('monage_use_cdn', $monage_use_cdn);
     }
 
-$monage_usecdn = "1";
-$monage_cdnimgloc = "https://cdn.rawgit.com/raspi0124/monage/5fc30ee7/monage.png";
-
-
-if ($monage_usecdn == "1") {
-    function monage_img_lacation() {
-    return $monage_cdnimgloc;
-}
-}
-
-else{   
-    function monage_img_lacation() {
-    return plugins_url( 'monage.png', __FILE__ );
-}
-}
 
 
 ?>
