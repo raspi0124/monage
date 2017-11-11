@@ -37,9 +37,6 @@ function monage_post_twitterid() {
     return get_option( 'monage_twitter_account' );
 }
 
-function monage_img_lacation() {
-    return plugins_url( 'monage.png', __FILE__ );
-}
 
 function monage_picwi() {
     return get_option( 'monage_picture_width' );
@@ -76,11 +73,29 @@ function monage_options_page() {
         // POSTデータの'"などがエスケープされるのでwp_unslashで戻して保存
         update_option('monage_twitter_account', wp_unslash($_POST['monage_twitter_account']));
          update_option('monage_picture_width', wp_unslash($_POST['monage_picture_width']));
-        update_option('monage_radio', $_POST['monage_radio']);
+        update_option('monage_payway', $_POST['monage_payway']);
         // チェックボックスはチェックされないとキーも受け取れないので、ない時は0にする
-        $monage_checkbox = isset($_POST['monage_checkbox']) ? 1 : 0;
-        update_option('monage_checkbox', $monage_checkbox);
+        $monage_use_cdn = isset($_POST['monage_use_cdn']) ? 1 : 0;
+        update_option('monage_use_cdn', $monage_use_cdn);
     }
+
+$monage_usecdn = "1";
+$monage_cdnimgloc = "https://cdn.rawgit.com/raspi0124/monage/5fc30ee7/monage.png";
+
+
+if ($monage_usecdn == "1") {
+    function monage_img_lacation() {
+    return $monage_cdnimgloc;
+}
+}
+
+else{   
+    function monage_img_lacation() {
+    return plugins_url( 'monage.png', __FILE__ );
+}
+}
+
+
 ?>
 <div class="wrap">
 <h2>Monage 設定画面</h2>
@@ -106,9 +121,13 @@ function monage_options_page() {
 
     <tr>
         <th scope="row">投げmonaの手段 （現在絶賛プラグイン構築中です。。待っててくださいな。）</th>
-        <td><p><label><input name="monage_radio" type="radio" value="0" disabled='disabled' <?php checked( 0, get_option( 'monage_radio' ) ); ?>    />tipmonaを投げ銭の手段として利用する </span></label><br />
-                <label><input name="monage_radio" type="radio" value="1" disabled='disabled' <?php checked( 1, get_option( 'monage_radio' ) ); ?> />askmonaのapiを使用して投げ銭してもらう</label></p>
+        <td><p><label><input name="monage_payway" type="radio" value="0" disabled='disabled' <?php checked( 0, get_option( 'monage_payway' ) ); ?>    />tipmonaを投げ銭の手段として利用する </label><br />
+                <label><input name="monage_payway" type="radio" value="1" disabled='disabled' <?php checked( 1, get_option( 'monage_payway' ) ); ?> />askmonaのapiを使用して投げ銭してもらう</label></p>
         </td>
+    </tr>
+    <tr>
+        <th scope="row"><label for="monage_use_cdn">画像の読み込みにCDNを使用(ベータ)</label></th>
+        <td><label><input name="monage_use_cdn" type="checkbox" id="monage_use_cdn" value="1" <?php checked( 1, get_option('monage_use_cdn')); ?> /> チェック</label></td>
     </tr>
 
 </table>
