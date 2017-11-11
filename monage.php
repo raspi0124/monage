@@ -2,7 +2,7 @@
 /*
 Plugin Name: monage
 Description: Let's make monage (giving monacoin) to wordpress blog more easier!
-Version: 0.05
+Version: 1.0
 Author: raspi0124
 Author URI: https://raspi-diary.com/
 License: GPLv3
@@ -41,28 +41,84 @@ function monage_img_lacation() {
     return plugins_url( 'monage.png', __FILE__ );
 }
 
+function monage_picwi() {
+    return get_option( 'monage_picture_width' );
+}
+
 add_shortcode('monage_twid', 'monage_post_twitterid');
 add_shortcode('monage_imgloc', 'monage_img_lacation');
-//add option for wordpress
-    function monage_addfield() {
-    add_settings_field( 'twitter', 'モナコインを投げる先のTwitterのIDをお願いします。', 'monage_twitter_field', 'general', 'default', array( 'label_for' => 'monage_twitter_account' ) );
+add_shortcode('monage_picwi', 'monage_picwi');
+
+
+// 管理メニューにフックを登録
+add_action('admin_menu', 'monage_add_pages');
+
+// メニューを追加する
+function monage_add_pages()
+{
+    // プラグインのスラグ名はユニークならなんでも良い
+    // /plugin/monage-test/monage-test.phpに置いているので
+    $monage_plugin_slug = plugin_basename(__FILE__);
+
+
+    // 既存の「設定」メニューにサブメニューを追加:
+    add_options_page('monage', 'monage',
+        'manage_options',
+        'monage-options-submenu',
+        'monage_options_page');
 }
-add_action( 'admin_init', 'monage_addfield' );
- 
-function monage_twitter_field( $args ) {
-    $monage_twitter_account = get_option( 'monage_twitter_account' );
+
+// メニューがクリックされた時にコンテンツ部に表示する内容
+// メニューで表示されるページの内容を返す関数
+function monage_options_page() {
+    // POSTデータがあれば設定を更新
+    if (isset($_POST['monage_twitter_account'])) {
+        // POSTデータの'"などがエスケープされるのでwp_unslashで戻して保存
+        update_option('monage_twitter_account', wp_unslash($_POST['monage_twitter_account']));
+         update_option('monage_picture_width', wp_unslash($_POST['monage_picture_width']));
+        update_option('monage_radio', $_POST['monage_radio']);
+        // チェックボックスはチェックされないとキーも受け取れないので、ない時は0にする
+        $monage_checkbox = isset($_POST['monage_checkbox']) ? 1 : 0;
+        update_option('monage_checkbox', $monage_checkbox);
+    }
 ?>
-    @<input type="text" name="monage_twitter_account" id="monage_twitter_account" size="30" value="<?php echo esc_html( $monage_twitter_account ); ?>" />
+<div class="wrap">
+<h2>Monage 設定画面</h2>
+<?php
+    // 更新完了を通知
+    if (isset($_POST['monage_twitter_account'])) {
+        echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible">
+            <p><strong>設定を保存しました。</strong></p></div>';
+    }
+?>
+
+<form method="post" action="">
+<table class="form-table">
+    <tr>
+        <th scope="row"><label for="monage_twitter_account">モナコインを投げる先のTwitterのIDをお願いします。</label></th>
+        <td>@<input name="monage_twitter_account" type="text" id="monage_twitter_account" value="<?php form_option('monage_twitter_account'); ?>" class="regular-text" /></td>
+    </tr>
+
+    <tr>
+        <th scope="row"><label for="monage_picture_width">画像の幅</label></th>
+        <td><input name="monage_picture_width" type="text" id="monage_picture_width" value="<?php form_option('monage_picture_width'); ?>" class="regular-text" /></td>
+    </tr>
+
+    <tr>
+        <th scope="row">投げmonaの手段 （現在絶賛プラグイン構築中です。。待っててくださいな。）</th>
+        <td><p><label><input name="monage_radio" type="radio" value="0" disabled='disabled' <?php checked( 0, get_option( 'monage_radio' ) ); ?>    />tipmonaを投げ銭の手段として利用する </span></label><br />
+                <label><input name="monage_radio" type="radio" value="1" disabled='disabled' <?php checked( 1, get_option( 'monage_radio' ) ); ?> />askmonaのapiを使用して投げ銭してもらう</label></p>
+        </td>
+    </tr>
+
+</table>
+<?php submit_button(); ?>
+</form>
+</div>
 <?php
 }
-function monage_post_amount() {
-    return get_option( 'monage_amount' );
-}
-add_shortcode('monage_amount', 'monage_post_amount');
-function monage_add_option() {
-    register_setting( 'general', 'monage_twitter_account' );
-}
-add_filter( 'admin_init', 'monage_add_option' );
+
+
 //add after post
 function monage_addafterpost($monage_content) {
  
@@ -72,9 +128,10 @@ $monage_bottom = <<< sentence
 </a> <br><a href="https://monappy.jp/memo_logs/view/monappy/123" target="_blank">モナゲ(tipmona)ってなに？</a><br>
 <a href="http://dic.nicovideo.jp/a/monacoin" rel="nofollow" target="_blank">そもそもMonacoinってなに？</a></center><style>
 .monage_image {
-    width: 300px;  /* 横幅を300pxに */
+    width: [monage_picwi]px; 
 }
 </style>
+
 sentence;
  
     if(!is_feed() && !is_home()) {
