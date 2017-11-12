@@ -136,17 +136,17 @@ var_dump( $monage_twitter_account );
 <form method="post" action="">
 <table class="form-table">
     <tr>
-        <th scope="row"><label for="monage_twitter_account">モナコインを投げる先のTwitterのIDをお願いします。</label></th>
+        <th scope="row"><label for="monage_twitter_account">モナコインを投げる先のTwitterのIDをお願いします。<span style="color: red;">設定必須！</span></label></th>
         <td>@<input name="monage_twitter_account" type="text" id="monage_twitter_account" value="<?php form_option('monage_twitter_account'); ?>" class="regular-text" /></td>
     </tr>
 
     <tr>
         <th scope="row"><label for="monage_picture_width">画像の幅</label></th>
-        <td><input name="monage_picture_width" type="text" id="monage_picture_width" value="<?php form_option('monage_picture_width'); ?>" class="regular-text" /></td>
+        <td><input name="monage_picture_width" type="text" id="monage_picture_width" value="<?php form_option('monage_picture_width'); ?>" class="regular-text" />px</td>
     </tr>
     <tr>
-        <th scope="row"><label for="monage_default_mona">デフォルトで投げてもらうmona</label></th>
-        <td><input name="monage_default_mona" type="text" id="monage_default_mona" value="<?php form_option('monage_default_mona'); ?>" class="regular-text" /></td>
+        <th scope="row"><label for="monage_default_mona">デフォルトで投げてもらうmona<span style="color: red;">設定必須！</span></label></th>
+        <td><input name="monage_default_mona" type="text" id="monage_default_mona" value="<?php form_option('monage_default_mona'); ?>" class="regular-text" />mona</td>
     </tr>
     <tr>
         <th scope="row"><label for="monage_use_cdn">画像の読み込みにCDNを使用(ベータ)</label></th>
