@@ -2,7 +2,7 @@
 /*
 Plugin Name: monage
 Description: Let's make monage (giving monacoin) to wordpress blog more easier!
-Version: 1.0
+Version: 1.1
 Author: raspi0124
 Author URI: https://raspi-diary.com/
 License: GPLv3
@@ -35,7 +35,7 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA)。
 */
 
 
-$monage_usecdn = "1";
+$monage_usecdn = get_option( 'monage_use_cdn' );
 
 
 if ( $monage_usecdn == "1" ) {
@@ -109,6 +109,9 @@ function monage_options_page() {
         echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible">
             <p><strong>設定を保存しました。</strong></p></div>';
     }
+
+$monage_usecdn = get_option( 'monage_use_cdn' );
+
 ?>
 
 <form method="post" action="">
@@ -131,7 +134,7 @@ function monage_options_page() {
     </tr>
     <tr>
         <th scope="row"><label for="monage_use_cdn">画像の読み込みにCDNを使用(ベータ)</label></th>
-        <td><label><input name="monage_use_cdn" type="checkbox" id="monage_use_cdn" value="1" <?php checked( 1, get_option('monage_use_cdn')); ?> /> チェック</label></td>
+        <td><label><input name="monage_use_cdn" type="checkbox" id="monage_use_cdn" value="1" <?php checked( 1, get_option('monage_use_cdn')); ?> /></label></td>
     </tr>
 
 </table>
