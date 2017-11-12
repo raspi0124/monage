@@ -61,9 +61,16 @@ function monage_picwi() {
     return get_option( 'monage_picture_width' );
 }
 
+
+
+function monage_default_mona() {
+    return get_option( 'monage_default_mona' );
+}
+
 add_shortcode('monage_twid', 'monage_post_twitterid');
 add_shortcode('monage_imgloc', 'monage_img_location');
 add_shortcode('monage_picwi', 'monage_picwi');
+add_shortcode('monage_default_mona', 'monage_default_mona');
 
 
 // 管理メニューにフックを登録
@@ -92,6 +99,7 @@ function monage_options_page() {
         // POSTデータの'"などがエスケープされるのでwp_unslashで戻して保存
         update_option('monage_twitter_account', wp_unslash($_POST['monage_twitter_account']));
          update_option('monage_picture_width', wp_unslash($_POST['monage_picture_width']));
+         update_option('monage_default_mona', wp_unslash($_POST['monage_default_mona']));
         update_option('monage_payway', $_POST['monage_payway']);
         // チェックボックスはチェックされないとキーも受け取れないので、ない時は0にする
         $monage_use_cdn = isset($_POST['monage_use_cdn']) ? 1 : 0;
@@ -104,13 +112,24 @@ function monage_options_page() {
 <div class="wrap">
 <h2>Monage 設定画面</h2>
 <?php
+$monage_twitter_account = get_option( 'monage_twitter_account' );
     // 更新完了を通知
     if (isset($_POST['monage_twitter_account'])) {
         echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible">
             <p><strong>設定を保存しました。</strong></p></div>';
     }
+    if ($monage_twitter_account = "") {
+        function monage_adnot_error() {
+    $class = 'notice notice-error';
+    $message = __( '設定→Monage で、標準で投げ銭される先のアカウントを設定してください。', 'monage' );
+
+    printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) ); 
+    }
+    add_action( 'admin_notices', 'monage_adnot_error' );
+    }
 
 $monage_usecdn = get_option( 'monage_use_cdn' );
+var_dump( $monage_twitter_account ); 
 
 ?>
 
@@ -125,6 +144,14 @@ $monage_usecdn = get_option( 'monage_use_cdn' );
         <th scope="row"><label for="monage_picture_width">画像の幅</label></th>
         <td><input name="monage_picture_width" type="text" id="monage_picture_width" value="<?php form_option('monage_picture_width'); ?>" class="regular-text" /></td>
     </tr>
+    <tr>
+        <th scope="row"><label for="monage_default_mona">デフォルトで投げてもらうmona</label></th>
+        <td><input name="monage_default_mona" type="text" id="monage_default_mona" value="<?php form_option('monage_default_mona'); ?>" class="regular-text" /></td>
+    </tr>
+    <tr>
+        <th scope="row"><label for="monage_use_cdn">画像の読み込みにCDNを使用(ベータ)</label></th>
+        <td><label><input name="monage_use_cdn" type="checkbox" id="monage_use_cdn" value="1" <?php checked( 1, get_option('monage_use_cdn')); ?> /></label></td>
+    </tr>
 
     <tr>
         <th scope="row">投げmonaの手段 （現在絶賛プラグイン構築中です。。待っててくださいな。）</th>
@@ -132,14 +159,25 @@ $monage_usecdn = get_option( 'monage_use_cdn' );
                 <label><input name="monage_payway" type="radio" value="1" disabled='disabled' <?php checked( 1, get_option( 'monage_payway' ) ); ?> />askmonaのapiを使用して投げ銭してもらう</label></p>
         </td>
     </tr>
-    <tr>
-        <th scope="row"><label for="monage_use_cdn">画像の読み込みにCDNを使用(ベータ)</label></th>
-        <td><label><input name="monage_use_cdn" type="checkbox" id="monage_use_cdn" value="1" <?php checked( 1, get_option('monage_use_cdn')); ?> /></label></td>
-    </tr>
+
 
 </table>
 <?php submit_button(); ?>
 </form>
+<br>
+<div class="monage_1">よろしければこのプラグインの作者にもちょっと投げ銭していただけますととても喜びます。<br></div>
+<a href="https://twitter.com/share?text=@tipmona%20tip%20@raspi0124%200.114114%20Monaを送ります">
+<img src="https://raw.githubusercontent.com/raspi0124/monage/5fc30ee7/monage.png" alt="Monacoinを投げる" rel="nofollow" class="monage_image">
+</a>
+<style>
+.monage_image {
+    width: 300px; 
+}
+.monage_1 {
+
+    font-size: 18px;
+}
+</style>
 </div>
 <?php
 }
@@ -149,7 +187,7 @@ $monage_usecdn = get_option( 'monage_use_cdn' );
 function monage_addafterpost($monage_content) {
  
 $monage_bottom = <<< sentence
-<center><a href="https://twitter.com/share?text=@tipmona%20tip%20@[monage_twid]%200.114114%20Monaを送ります">
+<center><a href="https://twitter.com/share?text=@tipmona%20tip%20@[monage_twid]%20[monage_default_mona]%20Monaを送ります">
 <img src="[monage_imgloc]" alt="Monacoinを投げる" rel="nofollow" class="monage_image">
 </a> <br><a href="https://monappy.jp/memo_logs/view/monappy/123" target="_blank">モナゲ(tipmona)ってなに？</a><br>
 <a href="http://dic.nicovideo.jp/a/monacoin" rel="nofollow" target="_blank">そもそもMonacoinってなに？</a></center><style>
