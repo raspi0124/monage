@@ -2,7 +2,7 @@
 /*
 Plugin Name: monage
 Description: Let's make monage (giving monacoin) to wordpress blog more easier!
-Version: 1.1
+Version: 1.3
 Author: raspi0124
 Author URI: https://raspi-diary.com/
 License: GPLv3
@@ -34,8 +34,27 @@ Temple Place, Suite 330, Boston, MA 02111-1307 USA)。
     This software includes the work that is distributed in the Apache License 2.0
 */
 
-
+//fallback mode
 $monage_usecdn = get_option( 'monage_use_cdn' );
+$monage_twitter_account = get_option( 'monage_twitter_account' );
+$monage_picture_width = get_option( 'monage_picture_width' );
+$monage_default_mona = get_option( 'monage_default_mona' );
+
+
+if ( $monage_twitter_account == "") {
+    update_option('monage_twitter_account', "raspi0124");
+}
+
+if ( $monage_picture_width == "" ) {
+    update_option('monage_picture_width', "300");
+}
+
+if ( $monage_default_mona == "" ) {
+    update_option('monage_default_mona', "0.114114");
+}
+
+
+
 
 
 if ( $monage_usecdn == "1" ) {
@@ -61,18 +80,22 @@ function monage_picwi() {
     return get_option( 'monage_picture_width' );
 }
 
-
-
 function monage_default_mona() {
     return get_option( 'monage_default_mona' );
 }
 
+function monage_beforesentence() {
+    return get_option( 'monage_beforesentence' );
+}
+function monage_aftersentence() {
+    return get_option( 'monage_aftersentence' );
+}
 add_shortcode('monage_twid', 'monage_post_twitterid');
 add_shortcode('monage_imgloc', 'monage_img_location');
 add_shortcode('monage_picwi', 'monage_picwi');
 add_shortcode('monage_default_mona', 'monage_default_mona');
-
-
+add_shortcode('monage_bf', 'monage_beforesentence');
+add_shortcode('monage_af', 'monage_aftersentence');
 // 管理メニューにフックを登録
 add_action('admin_menu', 'monage_add_pages');
 
@@ -100,6 +123,8 @@ function monage_options_page() {
         update_option('monage_twitter_account', wp_unslash($_POST['monage_twitter_account']));
          update_option('monage_picture_width', wp_unslash($_POST['monage_picture_width']));
          update_option('monage_default_mona', wp_unslash($_POST['monage_default_mona']));
+         update_option('monage_beforesentence', wp_unslash($_POST['monage_beforesentence']));
+         update_option('monage_aftersentence', wp_unslash($_POST['monage_aftersentence']));
         update_option('monage_payway', $_POST['monage_payway']);
         // チェックボックスはチェックされないとキーも受け取れないので、ない時は0にする
         $monage_use_cdn = isset($_POST['monage_use_cdn']) ? 1 : 0;
@@ -121,7 +146,7 @@ $monage_twitter_account = get_option( 'monage_twitter_account' );
     if ($monage_twitter_account = "") {
         function monage_adnot_error() {
     $class = 'notice notice-error';
-    $message = __( '設定→Monage で、標準で投げ銭される先のアカウントを設定してください。', 'monage' );
+    $message = '設定→Monage で、標準で投げ銭される先のアカウントを設定してください。' ;
 
     printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) ); 
     }
@@ -151,6 +176,14 @@ var_dump( $monage_twitter_account );
     <tr>
         <th scope="row"><label for="monage_use_cdn">画像の読み込みにCDNを使用(ベータ)</label></th>
         <td><label><input name="monage_use_cdn" type="checkbox" id="monage_use_cdn" value="1" <?php checked( 1, get_option('monage_use_cdn')); ?> /></label></td>
+    </tr>
+    <tr>
+        <th scope="row"><label for="monage_beforesentence">monageの画像/文 部分の前にいれるhtml</label></th>
+        <td><input name="monage_beforesentence" type="text" id="monage_beforesentence" value="<?php form_option('monage_beforesentence'); ?>" class="regular-text" /></td>
+    </tr>
+    <tr>
+        <th scope="row"><label for="monage_aftersentence">monageの画像/文 部分の後にいれるhtml</label></th>
+        <td><input name="monage_aftersentence" type="text" id="monage_aftersentence" value="<?php form_option('monage_aftersentence'); ?>" class="regular-text" /></td>
     </tr>
 
     <tr>
@@ -185,8 +218,10 @@ var_dump( $monage_twitter_account );
 
 //add after post
 function monage_addafterpost($monage_content) {
+
  
 $monage_bottom = <<< sentence
+[monage_bf]
 <center><a href="https://twitter.com/share?text=@tipmona%20tip%20@[monage_twid]%20[monage_default_mona]%20Monaを送ります">
 <img src="[monage_imgloc]" alt="Monacoinを投げる" rel="nofollow" class="monage_image">
 </a> <br><a href="https://monappy.jp/memo_logs/view/monappy/123" target="_blank">モナゲ(tipmona)ってなに？</a><br>
@@ -195,6 +230,7 @@ $monage_bottom = <<< sentence
     width: [monage_picwi]px; 
 }
 </style>
+[monage_af]
 
 sentence;
  

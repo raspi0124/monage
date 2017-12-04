@@ -1,10 +1,10 @@
 === Monage ===
 Contributors: raspi0124
-Tags: monacoin,mona,virtual currency,crypto currency
+Tags: monacoin,mona,virtual currency,crypto currency,仮想通貨,暗号通貨
 Requires at least: 4.7
-Tested up to: 4.9
-Requires PHP: 5.2
-License: GPLV2
+Tested up to: 5.0
+Requires PHP: 5.3
+License: GPLv3
 
 Let\'s make monage (giving monacoin) to wordpress blog more easier!
 
