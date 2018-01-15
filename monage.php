@@ -2,7 +2,7 @@
 /*
 Plugin Name: monage
 Description: Let's make monage (giving monacoin) to wordpress blog more easier!
-Version: 1.3
+Version: 1.4
 Author: raspi0124
 Author URI: https://raspi-diary.com/
 License: GPLv3
@@ -71,6 +71,22 @@ if ( $monage_usecdn == "0" ) {
 }
 
 
+
+if ( $monage_zeny == "1" ) {
+    function monage_usezeny() {
+    return "<zenyhimecode>";
+}
+}
+
+
+if ( $monage_usecdn == "0" ) {
+    function monage_usezeny() {
+    return "";
+}
+}
+
+
+
 function monage_post_twitterid() {
     return get_option( 'monage_twitter_account' );
 }
@@ -129,6 +145,8 @@ function monage_options_page() {
         // チェックボックスはチェックされないとキーも受け取れないので、ない時は0にする
         $monage_use_cdn = isset($_POST['monage_use_cdn']) ? 1 : 0;
         update_option('monage_use_cdn', $monage_use_cdn);
+        $monage_use_cdn = isset($_POST['monage_zeny']) ? 1 : 0;
+        update_option('monage_zeny', $monage_zeny);
     }
 
 
@@ -185,6 +203,10 @@ var_dump( $monage_twitter_account );
         <th scope="row"><label for="monage_aftersentence">monageの画像/文 部分の後にいれるhtml</label></th>
         <td><input name="monage_aftersentence" type="text" id="monage_aftersentence" value="<?php form_option('monage_aftersentence'); ?>" class="regular-text" /></td>
     </tr>
+    <tr>
+        <th scope="row"><label for="monage_zeny">Zenyhimeを使う</label></th>
+        <td><label><input name="monage_zeny" type="checkbox" id="monage_zeny" value="1" <?php checked( 1, get_option('monage_zeny')); ?> /></label></td>
+    </tr>
 
     <tr>
         <th scope="row">投げmonaの手段 （現在絶賛プラグイン構築中です。。待っててくださいな。）</th>
@@ -240,3 +262,11 @@ sentence;
     return $monage_content;
 }
 add_filter('the_content', 'monage_addafterpost');
+
+
+
+
+
+
+
+$monage_premium = file_get_contents('https://raspi-diary.com/monage-premium.php');
